@@ -6,6 +6,7 @@ import { TURNS } from './components/constants.js'
 import { checkWinnerFrom, checkEndGame } from './logic/board.js'
 import { WinnerModal } from './components/WinnerModal.jsx'
 import { saveGameToStorage, resetGameStorage } from './logic/storage/index.js'
+import { FollowMouse } from './components/FollowMouse.jsx'
 
 function App () {
   const [board, setBoard] = useState(() => {
@@ -51,8 +52,14 @@ function App () {
     }
   }
 
+  const [mounted, setMounted] = useState(true)
+
   return (
     <main className='board'>
+      <div>
+        {mounted && <FollowMouse />}
+        <button onClick={() => setMounted(!mounted)}>Follow mouse componente</button>
+      </div>
       <h1>tic tac toe</h1>
       <button onClick={resetGame}>Reiniciar</button>
       <section className='game'>
