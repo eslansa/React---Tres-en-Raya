@@ -1,40 +1,32 @@
-import { useState } from "react"
-import confetti from "canvas-confetti"
+import { useState } from 'react'
+import confetti from 'canvas-confetti'
 
-import {Square} from "./components/Square.jsx"
-import { TURNS} from "./components/constants.js"
-import { checkWinnerFrom, checkEndGame } from "./logic/board.js"
-import { WinnerModal } from "./components/WinnerModal.jsx"
-import { saveGameToStorage, resetGameStorage } from "./logic/storage/index.js"
+import { Square } from './components/Square.jsx'
+import { TURNS } from './components/constants.js'
+import { checkWinnerFrom, checkEndGame } from './logic/board.js'
+import { WinnerModal } from './components/WinnerModal.jsx'
+import { saveGameToStorage, resetGameStorage } from './logic/storage/index.js'
 
-
-
-function App() {
-  const [board, setBoard] = useState ( () => {
+function App () {
+  const [board, setBoard] = useState(() => {
     const boardFromStorage = window.localStorage.getItem('board')
     if (boardFromStorage) return JSON.parse(boardFromStorage)
-    return  Array(9).fill(null)
-  }
-
-  )
+    return Array(9).fill(null)
+  })
   const [turn, setTurn] = useState(() => {
     const turnFromStorage = window.localStorage.getItem('turn')
-    return turnFromStorage ?? TURNS.X 
+    return turnFromStorage ?? TURNS.X
   })
 
   const [winner, setWinner] = useState(null)
 
-  
   const resetGame = () => {
     setBoard(Array(9).fill(null))
     setTurn(TURNS.X)
     setWinner(null)
 
-    resetGameStorage ()
+    resetGameStorage()
   }
-
-
-
 
   const updateBoard = (index) => {
     if (board[index] || winner) return
@@ -43,12 +35,11 @@ function App() {
     newBoard[index] = turn
     setBoard(newBoard)
 
-
-    const newTurn = turn == TURNS.X ? TURNS.O : TURNS.X
+    const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X
     setTurn(newTurn)
-    saveGameToStorage ({
+    saveGameToStorage({
       board: newBoard,
-      turn:  newTurn,
+      turn: newTurn
     })
 
     const newWinner = checkWinnerFrom(newBoard)
@@ -61,29 +52,23 @@ function App() {
   }
 
   return (
-    <main className="board">
+    <main className='board'>
       <h1>tic tac toe</h1>
       <button onClick={resetGame}>Reiniciar</button>
-      <section className="game">
-        {
-          board.map((square, index) => {
-            return (
-              <Square
-                key={index}
-                index={index}
-                updateBoard={updateBoard}
-              >
-                {square}
-              </Square>
-            )
-          })
-        }
+      <section className='game'>
+        {board.map((square, index) => {
+          return (
+            <Square key={index} index={index} updateBoard={updateBoard}>
+              {square}
+            </Square>
+          )
+        })}
       </section>
-      <section className="turn">
-        <Square isSelected={turn == TURNS.X} >{TURNS.X}</Square>
-        <Square isSelected={turn == TURNS.O} >{TURNS.O}</Square>
+      <section className='turn'>
+        <Square isSelected={turn === TURNS.X}>{TURNS.X}</Square>
+        <Square isSelected={turn === TURNS.O}>{TURNS.O}</Square>
       </section>
-     <WinnerModal resetGame={resetGame} winner={winner} />
+      <WinnerModal resetGame={resetGame} winner={winner} />
     </main>
   )
 }
