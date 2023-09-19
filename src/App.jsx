@@ -57,7 +57,11 @@ function App () {
   return (
     <main className='board'>
       <div>
-        {mounted && <FollowMouse />}
+        {mounted && (
+          <FollowMouse>
+            {turn === TURNS.X ? 'X' : 'O'}
+          </FollowMouse>
+        )}
         <button onClick={() => setMounted(!mounted)}>Follow mouse componente</button>
       </div>
       <h1>tic tac toe</h1>
